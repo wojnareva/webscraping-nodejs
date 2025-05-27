@@ -1,18 +1,19 @@
 import * as cheerio from 'cheerio';
 import axios from 'axios';
 
-const url = 'https://knihobot.cz/';
+const url = 'https://knihobot.cz/p';
 
 axios.get(url)
     .then((response) => {
         const $ = cheerio.load(response.data);
 
-        $('.swiper-slide').each(function () {
-            const author = $(this).find('ul[class*="ProductItemAuthors"] a').first().text().trim();
-            const title = $(this).find('.ProductItemLink_root__BYR_c').text().trim();
-            const state = $(this).find('span[class*="ProductItemState"]').text().trim();
-            const price = $(this).find('.ProductItemPrice_root__vswyO').text().trim();
-            const linkPath = $(this).find('.ProductItemLink_root__BYR_c').attr('href');
+        $('.product-list__item').each(function () {
+            const item = $(this);
+            const author = item.find('ul[class*="ProductItemAuthors"] a').first().text().trim();
+            const title = item.find('.ProductItemLink_root__BYR_c').text().trim();
+            const state = item.find('span[class*="ProductItemState"]').text().trim();
+            const price = item.find('.ProductItemPrice_root__vswyO').text().trim();
+            const linkPath = item.find('.ProductItemLink_root__BYR_c').attr('href');
             const link = linkPath?.startsWith('http') ? linkPath : 'https://knihobot.cz' + linkPath;
 
             if (title) {
